@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-neutral font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-neutral-dark;
+  }
+}
+
+@layer components {
+  /* Boutons stylisés */
+  .btn-primary {
+    @apply bg-primary text-white px-6 py-3 rounded-lg font-medium
+           hover:bg-primary-hover transition-colors duration-200
+           focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-white px-6 py-3 rounded-lg font-medium
+           hover:bg-secondary-hover transition-colors duration-200
+           focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary text-primary px-6 py-3 rounded-lg font-medium
+           hover:bg-primary hover:text-white transition-colors duration-200
+           focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white rounded-xl shadow-md p-6 border border-slate-200;
+  }
+
+  /* Options de quiz */
+  .quiz-option {
+    @apply border-2 border-slate-300 rounded-lg p-4 cursor-pointer
+           transition-all duration-200 hover:border-primary hover:bg-blue-50
+           focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  }
+
+  .quiz-option-selected {
+    @apply border-primary bg-blue-50 ring-2 ring-primary;
+  }
+
+  /* Boutons de certitude */
+  .confidence-btn {
+    @apply px-4 py-2 rounded-lg font-medium border-2 transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .confidence-low {
+    @apply border-orange-300 text-orange-700 hover:bg-orange-50
+           focus:ring-orange-500;
+  }
+
+  .confidence-low-selected {
+    @apply bg-orange-500 text-white border-orange-500 ring-2 ring-orange-500;
+  }
+
+  .confidence-medium {
+    @apply border-blue-300 text-blue-700 hover:bg-blue-50
+           focus:ring-blue-500;
+  }
+
+  .confidence-medium-selected {
+    @apply bg-blue-500 text-white border-blue-500 ring-2 ring-blue-500;
+  }
+
+  .confidence-high {
+    @apply border-green-300 text-green-700 hover:bg-green-50
+           focus:ring-green-500;
+  }
+
+  .confidence-high-selected {
+    @apply bg-green-500 text-white border-green-500 ring-2 ring-green-500;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+  }
+}
