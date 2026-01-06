@@ -22,9 +22,9 @@ export default function RadarChart({ domainScores, domains }) {
   // Transformation des données pour Recharts avec emojis
   const data = domains.map(domain => {
     const score = domainScores[domain.id] || 0;
-    // Normalisation sur 100 (score max par domaine dépend du nombre de questions)
-    // Pour simplifier, on considère un max de 10 points par question
-    const normalizedScore = Math.max(0, Math.min(100, ((score + 20) / 30) * 100)); // -20 à +10 -> 0 à 100
+    // Normalisation sur 100 : maxScore par domaine = 30 (3 questions × 10 pts max)
+    const maxScorePerDomain = 30;
+    const normalizedScore = Math.max(0, Math.min(100, (score / maxScorePerDomain) * 100));
 
     const domainLabel = DOMAIN_LABELS[domain.id] || { emoji: '📊', label: domain.name };
 
