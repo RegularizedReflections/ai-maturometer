@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Brain, Play, Shield, TrendingUp, Scale, Users, AlertTriangle } from 'lucide-react';
+import { Brain, Play, Shield, TrendingUp, Scale, Users, AlertTriangle, AlertCircle } from 'lucide-react';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import QuizCard from './components/QuizCard';
 import ProgressBar from './components/ProgressBar';
 import ResultsDashboard from './components/ResultsDashboard';
@@ -17,6 +18,7 @@ function App() {
       <>
         <Header />
         <WelcomePage onStart={() => setHasStarted(true)} />
+        <Footer />
       </>
     );
   }
@@ -36,6 +38,7 @@ function App() {
             setHasStarted(false);
           }}
         />
+        <Footer />
       </>
     );
   }
@@ -78,6 +81,7 @@ function App() {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 }
@@ -86,6 +90,8 @@ function App() {
  * Page d'accueil avec présentation du concept
  */
 function WelcomePage({ onStart }) {
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+
   const features = [
     {
       icon: Brain,
@@ -238,7 +244,7 @@ function WelcomePage({ onStart }) {
           <ul className="space-y-2 text-sm text-neutral-light">
             <li className="flex items-start gap-2">
               <span className="text-primary">•</span>
-              <span><span className="font-semibold text-neutral-dark">5 questions</span> issues de cas réels de consulting</span>
+              <span><span className="font-semibold text-neutral-dark">15 questions</span> issues de cas réels de consulting</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-primary">•</span>
@@ -259,11 +265,66 @@ function WelcomePage({ onStart }) {
           </ul>
         </div>
 
+        {/* Conditions d'utilisation */}
+        <div className="card mb-8 bg-orange-50 border-2 border-orange-200">
+          <div className="flex items-start gap-3 mb-4">
+            <AlertCircle className="text-orange-600 flex-shrink-0 mt-0.5" size={24} />
+            <h2 className="text-xl font-bold text-neutral-dark">
+              📋 Conditions d'utilisation
+            </h2>
+          </div>
+
+          <p className="text-sm text-neutral-dark mb-4">
+            Cet outil est conçu pour l'auto-évaluation et la formation continue.
+            Il ne constitue pas :
+          </p>
+
+          <ul className="space-y-2 text-sm text-neutral-dark mb-4 ml-4">
+            <li className="flex items-start gap-2">
+              <span className="text-orange-600">•</span>
+              <span>Une certification professionnelle</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-orange-600">•</span>
+              <span>Une évaluation RH ou un critère de recrutement</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-orange-600">•</span>
+              <span>Un prérequis pour l'accès à des missions</span>
+            </li>
+          </ul>
+
+          <p className="text-sm text-neutral-dark mb-4">
+            <span className="font-semibold">Objectif :</span> Identifier vos axes d'amélioration personnels dans le domaine de la Gouvernance IA.
+          </p>
+
+          <p className="text-sm text-neutral-dark mb-4">
+            Les résultats restent confidentiels et ne sont pas transmis à votre employeur.
+          </p>
+
+          <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-orange-200">
+            <input
+              type="checkbox"
+              id="accept-terms"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+              className="mt-1 h-4 w-4 text-primary focus:ring-primary border-slate-300 rounded cursor-pointer"
+            />
+            <label
+              htmlFor="accept-terms"
+              className="text-sm text-neutral-dark font-medium cursor-pointer select-none"
+            >
+              J'ai lu et j'accepte ces conditions d'utilisation
+            </label>
+          </div>
+        </div>
+
         {/* CTA */}
         <div className="text-center">
           <button
             onClick={onStart}
-            className="btn-primary text-lg px-8 py-4 inline-flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
+            disabled={!acceptedTerms}
+            className="btn-primary text-lg px-8 py-4 inline-flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
           >
             <Play size={24} />
             Démarrer l'évaluation

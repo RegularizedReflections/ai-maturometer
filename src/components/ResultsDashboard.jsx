@@ -66,7 +66,9 @@ function generateLLMPrompt(results, domains, questions, answers) {
   // Calcul des statistiques par domaine
   const domainStats = domains.map(domain => {
     const domainData = results.domainScores[domain.id] || 0;
-    const normalizedScore = Math.max(0, Math.min(100, ((domainData + 20) / 30) * 100));
+    // Normalisation correcte : maxScore par domaine = 30 (3 questions × 10 pts max)
+    const maxScorePerDomain = 30;
+    const normalizedScore = Math.max(0, Math.min(100, (domainData / maxScorePerDomain) * 100));
 
     // Mapping des emojis
     const domainEmojis = {
@@ -101,16 +103,14 @@ function generateLLMPrompt(results, domains, questions, answers) {
     };
   });
 
-  const prompt = `Je viens de réaliser une évaluation de maturité en Gouvernance IA pour consultants.
+  const prompt = `Je viens de réaliser une évaluation de maturité en Gouvernance IA.
 
-📊 **Mes résultats :**
-
+**Mes résultats :**
 Score global : ${results.scorePercentage}% - Niveau : ${results.maturityLevel.level}
 Temps écoulé : ${results.elapsedTime || 'N/A'} min
 
 **Scores par domaine :**
-
-${domainStats.map(d => `${d.emoji} ${d.name} : ${d.rawScore}/10 (${d.percentage}%)`).join('\n')}
+${domainStats.map(d => `- ${d.emoji} ${d.name} : ${d.rawScore}/30 (${d.percentage}%)`).join('\n')}
 
 **Danger Zones détectées :** ${results.dangerZoneAnswers.length} question(s) avec erreur haute certitude
 
@@ -122,27 +122,23 @@ ${JSON.stringify(detailedAnswers, null, 2)}
 
 ---
 
-**Ma demande :**
+**Contexte important pour personnaliser ton analyse :**
 
-Peux-tu analyser ces résultats et me fournir :
+Avant de me donner ton diagnostic, j'ai besoin que tu me poses 3-4 questions pour contextualiser tes recommandations :
 
-1. **Diagnostic synthétique** : Mes forces principales et mes 3 faiblesses critiques
+1. **Mon profil actuel** : Consultant / Manager / Expert technique / Autre ?
+2. **Ma disponibilité** : Combien d'heures par semaine puis-je consacrer à la formation sur les 3 prochains mois ?
+3. **Mon objectif** : Monter en compétence pour mes missions actuelles / Évoluer vers un rôle différent / Préparer une certification ?
+4. **Mon contexte** : En mission client / En intercontrat / Autre ?
 
-2. **Plan d'action prioritaire** : Les 3 axes de formation à traiter en priorité (avec justification)
+Une fois que tu auras mes réponses, donne-moi :
 
-3. **Ressources concrètes** : Pour chaque axe, suggère 2-3 ressources spécifiques (articles de référence, formations en ligne, certifications, livres)
+1. **Diagnostic ciblé** : Mes 2-3 faiblesses prioritaires POUR MON PROFIL
+2. **Plan réaliste** : Un parcours adapté à ma disponibilité (pas un plan de formation à temps plein)
+3. **Ressources concrètes** : 2-3 ressources accessibles PAR axe (articles de référence gratuits, MOOCs courts, podcasts)
+4. **Quick wins** : 2-3 actions immédiates (< 2h chacune) pour démarrer dès cette semaine
 
-4. **Roadmap 3 mois** : Un parcours d'apprentissage progressif et réaliste pour passer au niveau supérieur
-
-**Contexte additionnel :**
-
-- **Profil** : Consultant en ESN généraliste (non spécialiste IA)
-- **Domaines d'expertise actuels** : [À COMPLÉTER - ex: Data, IoT, Transformation digitale]
-- **Objectif** : Être capable de conseiller des clients sur l'intégration responsable de l'IA dans leurs projets
-
----
-
-Merci pour ton analyse approfondie et tes recommandations concrètes !`;
+Évite les plans trop ambitieux ou irréalistes. Je cherche du pragmatique et de l'actionnable.`;
 
   return prompt;
 }
