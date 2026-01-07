@@ -39,6 +39,16 @@ export default function useQuiz(quizData) {
     }
   }, [currentQuestionIndex, answers, startTime, isCompleted]);
 
+  // Scroll automatique vers le haut lors du changement de question
+  useEffect(() => {
+    if (currentQuestionIndex > 0) {
+      // Petit délai pour laisser React finir le rendu
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    }
+  }, [currentQuestionIndex]);
+
   /**
    * Enregistre une réponse et passe à la question suivante
    */
